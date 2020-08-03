@@ -10,46 +10,34 @@ import javafx.scene.shape.Line;
 public class GraphNode extends StackPane {
 
     private Circle circle;
-    private Label text;
-
-    private ArrayList<GraphNode> connectedNodesList = new ArrayList<>();
-    private ArrayList<Line> edgesList = new ArrayList<>();
-    private ArrayList<Label> edgesLabelList = new ArrayList<>();
-
+    private Label label;
     private double radius = 30;
+    private ArrayList<GraphNode> neighbors = new ArrayList<>();
+    private ArrayList<Line> incidentEdges = new ArrayList<>();
 
     public GraphNode(String name, double xPos, double yPos, Color color) {
-
         circle = new Circle(radius, color);
-        text = new Label(name);
-        text.setTextFill(Color.WHITE);
-
+        label = new Label(name);
+        label.setTextFill(Color.WHITE);
         setLayoutX(xPos);
         setLayoutY(yPos);
-
-        getChildren().addAll(circle, text);
+        getChildren().addAll(circle, label);
         layout();
     }
 
-    public void addNeighbor(GraphNode node) {
-        connectedNodesList.add(node);
-    }
+    public void addNeighbor(GraphNode node) { neighbors.add(node); }
 
     public void addEdge(Line edgeLine, Label edgeLabel) {
-        edgesList.add(edgeLine);
-        edgesLabelList.add(edgeLabel);
+        incidentEdges.add(edgeLine);
         edgeLabel.layoutXProperty().bind(new DoubleBinding() {
             {
                 bind(translateXProperty());
-                bind(connectedNodesList.get(connectedNodesList.size() - 1).translateXProperty());
+                bind(neighbors.get(neighbors.size() - 1).translateXProperty());
             }
 
             @Override
             protected double computeValue() {
-
-                // We find the center of the line to translate the text
                 double width = edgeLine.getEndX() - edgeLine.getStartX();
-
                 return edgeLine.getStartX() + width / 2.0;
             }
         });
@@ -57,7 +45,7 @@ public class GraphNode extends StackPane {
         edgeLabel.layoutYProperty().bind(new DoubleBinding() {
             {
                 bind(translateYProperty());
-                bind(connectedNodesList.get(connectedNodesList.size() - 1).translateYProperty());
+                bind(neighbors.get(neighbors.size() - 1).translateYProperty());
             }
 
             @Override
@@ -70,32 +58,20 @@ public class GraphNode extends StackPane {
 
     }
     
-    public Label getLabel () { return text; }
+    public Label getLabel () { return label; }
     
     public Circle getCircle () { return circle; }
 
-    public ArrayList<GraphNode> getConnectedNodes() {
-        return connectedNodesList;
-    }
+    public ArrayList<GraphNode> getNeighbors() { return neighbors; }
 
-    public ArrayList<Line> getEdges() {
-        return edgesList;
-    }
+    public ArrayList<Line> getIncidentEdges() { return incidentEdges; }
 
-    public double getX() {
-        return getLayoutX() + getTranslateX();
-    }
+    public double getX() { return getLayoutX() + getTranslateX(); }
 
-    public double getY() {
-        return getLayoutY() + getTranslateY();
-    }
+    public double getY() { return getLayoutY() + getTranslateY(); }
 
-    public double getCenterX() {
-        return getX() + radius;
-    }
+    public double getCenterX() { return getX() + radius; }
 
-    public double getCenterY() {
-        return getY() + radius;
-    }
+    public double getCenterY() { return getY() + radius; }
 
 }

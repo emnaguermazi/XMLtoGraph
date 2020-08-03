@@ -38,9 +38,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     private static double orgSceneX, orgSceneY, orgTranslateX, orgTranslateY;
-
     private static Group root = new Group();
-    
     private static File fileBrowse = null;
     private static TextArea textArea;
     
@@ -170,22 +168,17 @@ public class Main extends Application {
 
     private static void updateLocations(GraphNode node) {
 
-        ArrayList<GraphNode> connectedNodes = node.getConnectedNodes();
+        ArrayList<GraphNode> neighbors = node.getNeighbors();
 
-        ArrayList<Line> edgesList = node.getEdges();
+        ArrayList<Line> incidentEdges = node.getIncidentEdges();
 
-        for (int i = 0; i < connectedNodes.size(); i++) {
-
-            GraphNode neighbor = connectedNodes.get(i);
-            Line l = edgesList.get(i);
-
-            l.setStartX(node.getCenterX());
-
-            l.setStartY(node.getCenterY());
-
-            l.setEndX(neighbor.getCenterX());
-
-            l.setEndY(neighbor.getCenterY());
+        for (int i = 0; i < neighbors.size(); i++) {
+            GraphNode neighbor = neighbors.get(i);
+            Line line = incidentEdges.get(i);
+            line.setStartX(node.getCenterX());
+            line.setStartY(node.getCenterY());
+            line.setEndX(neighbor.getCenterX());
+            line.setEndY(neighbor.getCenterY());
         }
     }
     
