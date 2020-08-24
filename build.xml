@@ -15,7 +15,6 @@
 	<target name="setup-staging-area">
 		<delete dir="externalLibs" />
 		<delete dir="project" />
-		<delete dir="projectRefs" />
 	
 		<mkdir dir="externalLibs" />
 	
@@ -71,8 +70,6 @@
 				<include name="src/**" />
 			</fileset>
 		</copy>
-	
-		<mkdir dir="projectRefs" />
 	</target>
 	<target name='do-compile'>
 		<delete dir="build" />
